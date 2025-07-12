@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { mockGNewsResponse } from "../test/MockGNewsResponse";
+//import { mockGNewsResponse } from "../test/MockGNewsResponse";
 import type { GNewsArticle } from "../model/GNews";
+import axios from "axios";
 
 interface SearchBarProps {
   onResults: (articles: GNewsArticle[]) => void;
@@ -8,14 +9,53 @@ interface SearchBarProps {
 
 function SearchBar({ onResults }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const handleSearch = (e: FormEvent) => {
+  const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
     console.log("Searching for:", searchTerm);
+    let data: GNewsArticle[] = [];
 
-    // TODO: Implement call to backend
-    const data: GNewsArticle[] = mockGNewsResponse.articles;
+    try {
+      data = await axios.get("http://localhost:3000/api/search-news", {
+        params: {
+          q: searchTerm,
+        },
+      });
+      console.log(data);
+    } catch (err) {
+      //TODO: Factor out into "handle axios error" thing
+      if (axios.isAxiosError(err)) {
+        if (err.response) {
+          // Server responded with a non-2xx code
+          console.error(
+            "Server responded with an error:",
+            err.response.status,
+            err.response.data
+          );
+          alert(
+            `Server Error ${err.response.status}: ${JSON.stringify(
+              err.response.data
+            )}`
+          );
+        } else if (err.request) {
+          // Request was made but no response received
+          console.error(
+            "No response received from server. Possible network error."
+          );
+          alert("Network error: unable to reach the server. Is it running?");
+        } else {
+          // Something happened setting up the request
+          console.error("Axios setup error:", err.message);
+          alert(`Unexpected error: ${err.message}`);
+        }
+      } else {
+        console.error("Non-Axios error:", err);
+        alert(`Unexpected error: ${err}`);
+      }
+    }
+    //const data: GNewsArticle[] = mockGNewsResponse.articles;
     onResults(data);
   };
+
   return (
     <div className="container" style={{ maxWidth: "1200px" }}>
       <form onSubmit={handleSearch}>
