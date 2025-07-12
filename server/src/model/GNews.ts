@@ -2,7 +2,7 @@ export interface GNewsSource {
   name: string;
   url: string;
 }
-  
+
 export interface GNewsArticle {
   title: string;
   description: string;
