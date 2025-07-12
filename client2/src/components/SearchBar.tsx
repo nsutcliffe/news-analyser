@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 //import { mockGNewsResponse } from "../test/MockGNewsResponse";
-import type { GNewsArticle } from "../model/GNews";
+import type { GNewsArticle, GNewsResponse } from "../model/GNews";
 import axios from "axios";
 
 interface SearchBarProps {
@@ -15,11 +15,15 @@ function SearchBar({ onResults }: SearchBarProps) {
     let data: GNewsArticle[] = [];
 
     try {
-      data = await axios.get("http://localhost:3000/api/search-news", {
-        params: {
-          q: searchTerm,
-        },
-      });
+      const response = await axios.get<GNewsResponse>(
+        "http://localhost:3000/api/search-news",
+        {
+          params: {
+            q: searchTerm,
+          },
+        }
+      );
+      data = response.data.articles;
       console.log(data);
     } catch (err) {
       //TODO: Factor out into "handle axios error" thing
@@ -52,7 +56,7 @@ function SearchBar({ onResults }: SearchBarProps) {
         alert(`Unexpected error: ${err}`);
       }
     }
-    //const data: GNewsArticle[] = mockGNewsResponse.articles;
+    //data = mockGNewsResponse.articles;
     onResults(data);
   };
 

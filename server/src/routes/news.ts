@@ -28,6 +28,7 @@ function buildGNewsRequest(searchTerm: string): string {
 
 router.get("/", async (req, res) => {
   const searchQuery = req.query.q as string | undefined;
+  console.log(`Search request for query term ${searchQuery}`);
   if (!searchQuery) {
     return res
       .status(400)
@@ -38,10 +39,8 @@ router.get("/", async (req, res) => {
     const response = await axios.get<GNewsResponse>(
       buildGNewsRequest(searchQuery)
     );
-    res.json({
-      message: "Fetched data from external API!",
-      data: response.data,
-    });
+
+    res.json(response.data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch external data" }); //TODO: Could pass back error more clearly from GNews if we get an error from them

@@ -4,6 +4,7 @@ import ResultsTable from "./components/ResultsTable";
 import { useState } from "react";
 import type { GNewsArticle } from "./model/GNews";
 import Banner from "./components/Banner";
+import "./styles.css";
 
 function App() {
   const [articles, setArticles] = useState<GNewsArticle[]>([]);

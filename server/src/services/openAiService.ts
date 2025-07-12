@@ -47,8 +47,6 @@ export const summariseAndAnalyse = async (
     } catch (error: any) {
       if (error.statusCode === 429) {
         throw new RateLimitError();
-      } else if (1 == 1) {
-        throw new ConnectivityError();
       } else {
         console.error("Non-retriable error:", error);
         throw error;

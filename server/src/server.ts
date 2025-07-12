@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import cors from "cors";
+
 import newsRouter from "./routes/news";
 import submitToLLMRouter from "./routes/submitToLLM";
 import { ConnectivityError, RateLimitError } from "./model/Errors";
@@ -10,14 +12,15 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 // Test route
 app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
-app.use("/news", newsRouter);
-app.use("/analyse-article", submitToLLMRouter);
+app.use("/api/search-news", newsRouter);
+app.use("/api/analyse-article", submitToLLMRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {

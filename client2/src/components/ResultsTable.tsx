@@ -32,7 +32,14 @@ function ResultsTable({ articles }: ResultsTableProps) {
               <td>{article.publishedAt}</td>
               <td>{article.title}</td>
               <td>
-                <a href={article.url}>{article.url}</a>
+                <a
+                  href={article.url}
+                  className="truncate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {article.url}
+                </a>
               </td>
               <td>
                 <button
