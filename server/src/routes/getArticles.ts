@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const articles: NewsSummaryDoc[] = await NewsSummary.find({});
-  console.log(articles);
   res.json({
     rows: articles,
   });

@@ -1,4 +1,3 @@
-import axios from "axios";
 import type { GNewsArticle } from "../model/GNews";
 import SummariseButton from "./SummariseButton";
 
@@ -7,23 +6,6 @@ interface ResultsTableProps {
 }
 
 function ResultsTable({ articles }: ResultsTableProps) {
-  const submitForAnalysis = async (article: GNewsArticle) => {
-    /**
-     *   const handleSubmit = async (title:string, description: string, content: string, url: string) => {}
-     */
-    const response = await axios.post(
-      "http://localhost:3000/api/analyse-article",
-      {
-        title: article.title,
-        description: article.description,
-        content: article.content,
-        url: article.url,
-      }
-    );
-
-    console.log(response);
-  };
-
   return (
     articles.length > 0 && (
       <table className="table table-striped">

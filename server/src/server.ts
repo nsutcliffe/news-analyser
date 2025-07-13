@@ -2,12 +2,14 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Request, Response, NextFunction } from "express";
 
 import newsRouter from "./routes/news";
 import submitToLLMRouter from "./routes/submitToLLM";
 import getArticlesRouter from "./routes/getArticles";
 import { ConnectivityError, RateLimitError } from "./model/Errors";
-import { Request, Response, NextFunction } from "express";
 import connectDB from "./db/db";
 
 const app = express();
@@ -25,6 +27,14 @@ app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
 app.use("/api/get-articles", getArticlesRouter);
 
+// Serve static files from React build
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {
     return res.status(429).json({
@@ -55,7 +65,7 @@ const startServer = async () => {
       console.log(`Server running at http://localhost:${port}`);
     });
   } catch (error) {
-    console.error("❌ Error starting server:", error);
+    console.error("Error starting server:", error);
     process.exit(1);
   }
 };

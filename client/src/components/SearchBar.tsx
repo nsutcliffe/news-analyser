@@ -15,14 +15,11 @@ function SearchBar({ onResults }: SearchBarProps) {
     let data: GNewsArticle[] = [];
 
     try {
-      const response = await axios.get<GNewsResponse>(
-        "http://localhost:3000/api/search-news",
-        {
-          params: {
-            q: searchTerm,
-          },
-        }
-      );
+      const response = await axios.get<GNewsResponse>("/api/search-news", {
+        params: {
+          q: searchTerm,
+        },
+      });
       data = response.data.articles;
       console.log(data);
     } catch (err) {

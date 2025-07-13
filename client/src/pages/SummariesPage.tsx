@@ -16,9 +16,8 @@ export default function SummariesPage() {
     async function fetchArticles() {
       try {
         const response = await axios.get<GetArticlesResponse>(
-          "http://localhost:3000/api/get-articles"
+          "/api/get-articles"
         );
-        console.log(response);
 
         const allArticles = response.data.rows;
         const rows: GridValidRowModel[] = allArticles.map((r) => ({

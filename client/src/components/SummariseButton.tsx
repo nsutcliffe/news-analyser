@@ -13,15 +13,12 @@ function SummariseButton({ article }: SummariseButtonProps) {
     setStatus("submitting");
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/analyse-article",
-        {
-          title: article.title,
-          description: article.description,
-          content: article.content,
-          url: article.url,
-        }
-      );
+      const response = await axios.post("/api/analyse-article", {
+        title: article.title,
+        description: article.description,
+        content: article.content,
+        url: article.url,
+      });
       console.log(response);
       setStatus("success");
     } catch (error: unknown) {
