@@ -13,7 +13,7 @@ import { ConnectivityError, RateLimitError } from "./model/Errors";
 import connectDB from "./db/db";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -27,14 +27,17 @@ app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
 app.use("/api/get-articles", getArticlesRouter);
 
-// Serve static files from React build
+// Serve static files from React build only in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
+  const clientPath = path.resolve(__dirname, "../../client/dist");
+
+  app.use(express.static(clientPath));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.join(clientPath, "index.html"));
   });
 }
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {
     return res.status(429).json({
@@ -62,7 +65,7 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(port, () => {
-      console.log(`Server running at http://localhost:${port}`);
+      console.log(`Server listening on port ${port}`);
     });
   } catch (error) {
     console.error("Error starting server:", error);
