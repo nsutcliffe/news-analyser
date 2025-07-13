@@ -33,9 +33,15 @@ if (process.env.NODE_ENV === "production") {
   const clientPath = path.resolve(__dirname, "../../client/dist");
 
   app.use(express.static(clientPath));
+
   console.log("Registering routes in wildcard router");
-  app.get("*", (req, res) => {
-    console.log("Wildcard hit:", req.originalUrl);
+
+  app.get("*", (req, res, next) => {
+    // if the URL looks like a full URL, reject it
+    if (req.originalUrl.startsWith("http")) {
+      console.log("Refusing full URL:", req.originalUrl);
+      return res.status(400).send("Bad request.");
+    }
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
