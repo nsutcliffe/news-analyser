@@ -23,6 +23,23 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
+/******************************************************************
+ * DEBUG:  log every path Express tries to compile.
+ ******************************************************************/
+// Grab Layer prototype *before* any routes are registered
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Layer = require("express/lib/router/layer");
+
+const originalCompile = Layer.prototype._compile;
+Layer.prototype._compile = function _compileDebug(
+  path: string,
+  params: unknown[]
+) {
+  // Log the raw path string Express is about to feed to path-to-regexp
+  console.log("[EXPRESS-COMPILE] →", path);
+  return originalCompile.call(this, path, params);
+};
+
 console.log("Registering routes");
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
