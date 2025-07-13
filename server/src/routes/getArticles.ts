@@ -3,6 +3,8 @@ import { NewsSummary, NewsSummaryDoc } from "../model/NewsSummaries";
 
 const router = express.Router();
 
+console.log("Registering routes in getArticles router");
+
 router.get("/", async (req, res) => {
   const articles: NewsSummaryDoc[] = await NewsSummary.find({});
   res.json({

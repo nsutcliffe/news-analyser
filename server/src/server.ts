@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
+console.log("Registering routes");
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
 app.use("/api/get-articles", getArticlesRouter);
@@ -32,12 +33,13 @@ if (process.env.NODE_ENV === "production") {
   const clientPath = path.resolve(__dirname, "../../client/dist");
 
   app.use(express.static(clientPath));
-
+  console.log("Registering routes in wildcard router");
   app.get("*", (req, res) => {
     console.log("Wildcard hit:", req.originalUrl);
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
+console.log("Finished routes");
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {
