@@ -3,6 +3,9 @@ import { OpenAIResponse } from "../model/OpenAI";
 import { summariseAndAnalyse } from "../services/openAiService";
 import { storeData } from "../services/databaseService";
 import { PositiveNegativeNeutral } from "../model/NewsSummaries";
+import axios from "axios";
+import OpenAI from "openai";
+
 const router = express.Router();
 
 function translateSentiment(sentiment: string): PositiveNegativeNeutral {
@@ -26,15 +29,36 @@ router.post("/", async (req, res) => {
 
   try {
     const response: OpenAIResponse = await summariseAndAnalyse(articleText);
+    console.log(response);
     await storeData(title, response._2, translateSentiment(response._1), url);
 
     res.json({
       message: "Article Summarised and Stored",
       data: response,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch external data" });
+    // Handle OpenAI 429 error
+
+    if (error instanceof OpenAI.APIError) {
+      if (error.status === 429 || error.code === "rate_limit_exceeded") {
+        return res.status(429).json({
+          errorCode: "RATE_LIMIT_EXCEEDED",
+          message: "OpenAI rate limit or quota exceeded.",
+        });
+      }
+
+      // bubble any other OpenAI API error as-is
+      return res.status(error.status ?? 500).json({
+        errorCode: "OPENAI_ERROR",
+        message: error.message,
+      });
+    }
+
+    res.status(500).json({
+      errorCode: "INTERNAL_SERVER_ERROR",
+      message: "Something went wrong processing the article.",
+    });
   }
 });
 

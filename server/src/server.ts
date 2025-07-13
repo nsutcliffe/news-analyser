@@ -5,8 +5,10 @@ import cors from "cors";
 
 import newsRouter from "./routes/news";
 import submitToLLMRouter from "./routes/submitToLLM";
+import getArticlesRouter from "./routes/getArticles";
 import { ConnectivityError, RateLimitError } from "./model/Errors";
 import { Request, Response, NextFunction } from "express";
+import connectDB from "./db/db";
 
 const app = express();
 const port = 3000;
@@ -21,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
+app.use("/api/get-articles", getArticlesRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {
@@ -45,6 +48,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("❌ Error starting server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();

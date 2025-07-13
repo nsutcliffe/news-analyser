@@ -1,4 +1,6 @@
+import axios from "axios";
 import type { GNewsArticle } from "../model/GNews";
+import SummariseButton from "./SummariseButton";
 
 interface ResultsTableProps {
   articles: GNewsArticle[];
@@ -6,7 +8,20 @@ interface ResultsTableProps {
 
 function ResultsTable({ articles }: ResultsTableProps) {
   const submitForAnalysis = async (article: GNewsArticle) => {
-    console.log(article);
+    /**
+     *   const handleSubmit = async (title:string, description: string, content: string, url: string) => {}
+     */
+    const response = await axios.post(
+      "http://localhost:3000/api/analyse-article",
+      {
+        title: article.title,
+        description: article.description,
+        content: article.content,
+        url: article.url,
+      }
+    );
+
+    console.log(response);
   };
 
   return (
@@ -27,8 +42,8 @@ function ResultsTable({ articles }: ResultsTableProps) {
         </thead>
         <tbody>
           {articles.map((article, idx) => (
-            <tr key={idx}>
-              <th scope="row">{idx}</th>
+            <tr key={idx + 1}>
+              <th scope="row">{idx + 1}</th>
               <td>{article.publishedAt}</td>
               <td>{article.title}</td>
               <td>
@@ -42,12 +57,7 @@ function ResultsTable({ articles }: ResultsTableProps) {
                 </a>
               </td>
               <td>
-                <button
-                  className="btn btn-success btn-sm"
-                  onClick={() => submitForAnalysis(article)}
-                >
-                  Analyse →
-                </button>
+                <SummariseButton article={article} />
               </td>
             </tr>
           ))}

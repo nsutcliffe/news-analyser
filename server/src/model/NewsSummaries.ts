@@ -5,6 +5,7 @@ export type PositiveNegativeNeutral =
   | "Negative"
   | "Neutral"
   | "Unknown";
+
 export interface NewsSummaryDoc extends Document {
   articleTitle: string;
   articleSummary: string;
@@ -20,7 +21,7 @@ const newsSchema = new Schema<NewsSummaryDoc>(
     articleSummary: { type: String, required: true },
     sentiment: {
       type: String,
-      enum: ["Positive", "Negative", "Neutral"],
+      enum: ["Positive", "Negative", "Neutral", "Unknown"],
       required: true,
     },
     originalArticleURL: { type: String, required: true },

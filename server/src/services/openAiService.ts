@@ -7,6 +7,7 @@ const openai = new OpenAI({
 });
 
 const promptInstructions = `Summarize text briefly and classify sentiment:
+You are only allowed to use the values P, Ntl and Ng for sentiment classification. Note:
   P = Positive
   Ntl = Neutral
   Ng = Negative
@@ -22,7 +23,7 @@ export const summariseAndAnalyse = async (
   while (retries < maxRetries) {
     try {
       const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4.1-nano",
         messages: [
           {
             role: "system",
