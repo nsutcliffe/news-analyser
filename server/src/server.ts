@@ -18,11 +18,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
-});
-
 console.log("Registering routes");
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
