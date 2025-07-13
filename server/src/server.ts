@@ -34,6 +34,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(clientPath));
 
   app.get("*", (req, res) => {
+    console.log("Wildcard hit:", req.originalUrl);
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
