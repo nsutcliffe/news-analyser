@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
-const connectDB = async (): Promise<void> => {
+async function connectDB(): Promise<void> {
   try {
+    console.log("Attempting initial DB Connection");
     await mongoose
       .connect(process.env.MONGODB_URI!)
       .then(() => console.log("MongoDB connected"))
@@ -11,6 +12,6 @@ const connectDB = async (): Promise<void> => {
     console.error(error);
     process.exit(1);
   }
-};
+}
 
 export default connectDB;

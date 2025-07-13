@@ -10,7 +10,7 @@ import newsRouter from "./routes/news";
 import submitToLLMRouter from "./routes/submitToLLM";
 import getArticlesRouter from "./routes/getArticles";
 import { ConnectivityError, RateLimitError } from "./model/Errors";
-import connectDB from "./db/db";
+import connectWithRetry from "./db/db";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -56,6 +56,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     });
   }
 
+  // TODO: Error handling for database connection issues
   // fallback for unknown errors
   console.error(err);
   res.status(500).json({
@@ -66,7 +67,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const startServer = async () => {
   try {
-    await connectDB();
+    await connectWithRetry();
     app.listen(port, () => {
       console.log(`Server listening on port ${port}`);
     });
