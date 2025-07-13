@@ -23,23 +23,6 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
-/******************************************************************
- * DEBUG:  log every path Express tries to compile.
- ******************************************************************/
-// Grab Layer prototype *before* any routes are registered
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Layer = require("express/lib/router/layer");
-
-const originalCompile = Layer.prototype._compile;
-Layer.prototype._compile = function _compileDebug(
-  path: string,
-  params: unknown[]
-) {
-  // Log the raw path string Express is about to feed to path-to-regexp
-  console.log("[EXPRESS-COMPILE] →", path);
-  return originalCompile.call(this, path, params);
-};
-
 console.log("Registering routes");
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
@@ -47,13 +30,12 @@ app.use("/api/get-articles", getArticlesRouter);
 
 // Serve static files from React build only in production
 if (process.env.NODE_ENV === "production") {
-  const clientPath = path.resolve(__dirname, "../../client/dist");
-
+  const clientPath = path.resolve(__dirname, "..", "..", "client", "dist");
   app.use(express.static(clientPath));
 
   console.log("Registering routes in wildcard router");
-
-  app.get("*", (req, res, next) => {
+  // This slightly odd wildcard is due to a bug in express 5; see https://github.com/expressjs/express/issues/6428
+  app.get(/.*/, (req, res, next) => {
     // if the URL looks like a full URL, reject it
     if (req.originalUrl.startsWith("http")) {
       console.log("Refusing full URL:", req.originalUrl);
