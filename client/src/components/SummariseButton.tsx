@@ -13,7 +13,7 @@ function SummariseButton({ article }: SummariseButtonProps) {
     setStatus("submitting");
 
     try {
-      const response = await axios.post("/api/analyse-article", {
+      await axios.post("/api/analyse-article", {
         title: article.title,
         description: article.description,
         content: article.content,
