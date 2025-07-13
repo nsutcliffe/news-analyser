@@ -1,37 +1,18 @@
-import SearchBar from "./components/SearchBar";
-import ResultsTable from "./components/ResultsTable";
-
 import { useState } from "react";
-import type { GNewsArticle } from "./model/GNews";
 import Banner from "./components/Banner";
 import { Tabs, Tab, Box } from "@mui/material";
 import "./styles.css";
 import SummariesPage from "./pages/SummariesPage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
-  const [articles, setArticles] = useState<GNewsArticle[]>([]);
   const [tabIndex, setTabIndex] = useState(0);
   let content;
 
   if (tabIndex === 0) {
-    content = (
-      <>
-        <div>
-          <SearchBar onResults={setArticles} />
-        </div>
-
-        <br />
-        <div>
-          <ResultsTable articles={articles} />
-        </div>
-      </>
-    );
+    content = <SearchPage />;
   } else if (tabIndex === 1) {
-    content = (
-      <>
-        <SummariesPage />
-      </>
-    );
+    content = <SummariesPage />;
   } else {
     content = null; // optional: fallback if needed
   }

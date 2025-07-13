@@ -19,7 +19,6 @@ function SummariseButton({ article }: SummariseButtonProps) {
         content: article.content,
         url: article.url,
       });
-      console.log(response);
       setStatus("success");
     } catch (error: unknown) {
       setStatus("error");
