@@ -40,14 +40,3 @@ export default function SummariesPage() {
 
   return <SummariesTable rows={rows} loading={loading} />;
 }
-//   const rows: GridRowsProp = [
-//     {
-//       id: 1,
-//       title: "Data Grid",
-//       sentiment: "the Community version",
-//       summary: "Some summary",
-//       url: "http://www.google.com",
-//     },
-//     { id: 2, title: "Data Grid Pro", sentiment: "the Pro version" },
-//     { id: 3, title: "Data Grid Premium", sentiment: "the Premium version" },
-//   ];

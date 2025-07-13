@@ -60,17 +60,15 @@ function SearchBar({ onResults }: SearchBarProps) {
   return (
     <div className="container" style={{ maxWidth: "1200px" }}>
       <form onSubmit={handleSearch}>
-        <div className="mb-3">
+        <div className="d-flex mb-3">
           <input
             type="text"
-            className="form-control rounded-pill"
+            className="form-control rounded-pill me-2"
             placeholder="Search ..."
             key="newsSearch"
             value={searchTerm}
-            onChange={(changeEvent) => setSearchTerm(changeEvent.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
-        <div>
           <button className="btn btn-primary rounded-pill" type="submit">
             Search
           </button>

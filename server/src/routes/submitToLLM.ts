@@ -15,7 +15,7 @@ function translateSentiment(sentiment: string): PositiveNegativeNeutral {
   else return "Unknown";
 }
 
-console.log("Registering routes in llm router");
+console.debug("Registering routes in llm router");
 
 router.post("/", async (req, res) => {
   const { title, description, content, url } = req.body;

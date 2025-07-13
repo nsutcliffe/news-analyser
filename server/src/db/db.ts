@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-async function connectDB(): Promise<void> {
+async function connectWithRetry(): Promise<void> {
   try {
     console.log("Attempting initial DB Connection");
     await mongoose
@@ -8,10 +8,15 @@ async function connectDB(): Promise<void> {
       .then(() => console.log("MongoDB connected"))
       .catch((err) => console.error(err));
     console.log("MongoDB connected");
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Mongo DB connection error:", error.message);
+    } else {
+      console.error("Mongo DB connection error:", error);
+    }
+    console.log("Retrying in 5 seconds");
+    setTimeout(connectWithRetry, 5000);
   }
 }
 
-export default connectDB;
+export default connectWithRetry;

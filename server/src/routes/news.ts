@@ -26,7 +26,7 @@ function buildGNewsRequest(searchTerm: string): string {
   return `${gnewsSearchLink}?${queryString}`;
 }
 
-console.log("Registering routes in news router");
+console.debug("Registering routes in news router");
 
 router.get("/", async (req, res) => {
   const searchQuery = req.query.q as string | undefined;

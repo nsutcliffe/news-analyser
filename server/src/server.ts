@@ -18,7 +18,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-console.log("Registering routes");
+console.debug("Registering routes");
 app.use("/api/search-news", newsRouter);
 app.use("/api/analyse-article", submitToLLMRouter);
 app.use("/api/get-articles", getArticlesRouter);
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === "production") {
   const clientPath = path.resolve(__dirname, "..", "..", "client", "dist");
   app.use(express.static(clientPath));
 
-  console.log("Registering routes in wildcard router");
+  console.debug("Registering routes in wildcard router");
   // This slightly odd wildcard is due to a bug in express 5; see https://github.com/expressjs/express/issues/6428
   app.get(/.*/, (req, res, next) => {
     // if the URL looks like a full URL, reject it
@@ -39,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }
-console.log("Finished routes");
+console.debug("Finished routes");
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof RateLimitError) {

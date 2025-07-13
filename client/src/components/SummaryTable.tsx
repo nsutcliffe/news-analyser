@@ -48,26 +48,18 @@ function SummaryTable({ rows, loading }: SummaryTableProps) {
       wordWrap: "break-word",
       lineHeight: "1.2",
     },
+    "& .MuiDataGrid-columnHeaders": {
+      fontWeight: "bold",
+      fontSize: "1.1rem",
+    },
   }));
 
   const columns: GridColDef[] = [
-    { field: "title", headerName: "Title", width: 300 },
-    { field: "sentiment", headerName: "Sentiment", width: 150 },
-    { field: "summary", headerName: "Summary", width: 500 },
-    { field: "url", headerName: "Link to Source", width: 300 },
+    { field: "title", headerName: "Title", flex: 3 },
+    { field: "sentiment", headerName: "Sentiment", flex: 1 },
+    { field: "summary", headerName: "Summary", flex: 4 },
+    { field: "url", headerName: "Link to Source", flex: 3 },
   ];
-
-  //   const rows: GridRowsProp = [
-  //     {
-  //       id: 1,
-  //       title: "Data Grid",
-  //       sentiment: "the Community version",
-  //       summary: "Some summary",
-  //       url: "http://www.google.com",
-  //     },
-  //     { id: 2, title: "Data Grid Pro", sentiment: "the Pro version" },
-  //     { id: 3, title: "Data Grid Premium", sentiment: "the Premium version" },
-  //   ];
 
   return (
     <div style={{ height: 800, width: "100%" }}>
