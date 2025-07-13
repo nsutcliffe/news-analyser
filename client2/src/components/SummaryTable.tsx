@@ -43,12 +43,17 @@ function SummaryTable({ rows, loading }: SummaryTableProps) {
         backgroundColor: theme.palette.grey[800],
       }),
     },
+    "& .MuiDataGrid-cell": {
+      whiteSpace: "normal",
+      wordWrap: "break-word",
+      lineHeight: "1.2",
+    },
   }));
 
   const columns: GridColDef[] = [
-    { field: "title", headerName: "Title", width: 200 },
-    { field: "sentiment", headerName: "Sentiment", width: 300 },
-    { field: "summary", headerName: "Summary", width: 300 },
+    { field: "title", headerName: "Title", width: 300 },
+    { field: "sentiment", headerName: "Sentiment", width: 150 },
+    { field: "summary", headerName: "Summary", width: 500 },
     { field: "url", headerName: "Link to Source", width: 300 },
   ];
 
@@ -65,7 +70,7 @@ function SummaryTable({ rows, loading }: SummaryTableProps) {
   //   ];
 
   return (
-    <div style={{ height: 300, width: "100%" }}>
+    <div style={{ height: 800, width: "100%" }}>
       <StripedDataGrid
         rows={rows}
         columns={columns}
