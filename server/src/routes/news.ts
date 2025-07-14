@@ -44,8 +44,22 @@ router.get("/", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 400) {
+        return res.status(400).json({
+          error: "Bad request to external API; if your search term contains special characters, try surrounding it with double quotes",
+          details: error.response.data,
+        });
+      }
+      // Handle other HTTP errors from external API
+      return res.status(error.response.status).json({
+        error: "External API error",
+        details: error.response.data,
+      });
+    }
+    // Handle other (non-Axios or network) errors
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch external data" }); //TODO: Could pass back error more clearly from GNews if we get an error from them
+    res.status(500).json({ error: "Failed to fetch external data" });
   }
 });
 
