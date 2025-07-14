@@ -58,7 +58,21 @@ function SummaryTable({ rows, loading }: SummaryTableProps) {
     { field: "title", headerName: "Title", flex: 3 },
     { field: "sentiment", headerName: "Sentiment", flex: 1 },
     { field: "summary", headerName: "Summary", flex: 4 },
-    { field: "url", headerName: "Link to Source", flex: 3 },
+    {
+      field: "url",
+      headerName: "Link to Source",
+      flex: 3,
+      renderCell: (params) => (
+        <a
+          href={params.value}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ wordBreak: "break-all" }}
+        >
+          {params.value}
+        </a>
+      ),
+    },
   ];
 
   return (
